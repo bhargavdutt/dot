@@ -17,3 +17,4 @@ seconds2=$(prepend_zero $(($duration % 60)))
 
 echo -n "$artist  -  $song [$minutes1:$seconds1 / $minutes2:$seconds2]"
 
+EDIT: I fixed an issue, where grep would search for all tags where artist was present. I fixed

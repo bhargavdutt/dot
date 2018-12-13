@@ -5,8 +5,8 @@
 ;**********************************************************
 
 [colors]
-; Base colors from .Xresources
-bg      =   #615772
+; Base colors from .Xresource
+bg      =   #772c8bb0
 bg-alt  =   ${xrdb:color0}
 fg      =   #ffffff
 fg-alt  =   ${xrdb:color8}
@@ -56,9 +56,7 @@ font-0 = xft:iosevka:pixelsize=12:style=medium:antialias=true;3
 font-1 = MaterialIcons-Regular:size=16;3
 
 modules-left = i3
-modules-center=cmus
-modules-right = battery volume wlan date
-
+modules-right = gmail system-cpu-temppercore  cpu label battery volume wired-network wlan date
 tray-position = right
 tray-padding = 1
 
@@ -105,15 +103,26 @@ strip-wsnumbers = true
 label-focused-padding = 2
 label-focused-margin = 0.5
 label-focused-foreground = #ffffff
-label-focused-background = #3f3f3f
+label-focused-background = #2c8bb0
 label-focused-underline = #fba922
 
 label-unfocused-padding = 2
 label-unfocused-margin = 0.5
 label-visible-padding = 2
 label-visible-margin = 0.5
-
+label-separator = |
 label-empty-foreground = #55
+
+
+[module/wired-network]
+type = internal/network
+interface = enp19s0
+interval = 3.0
+
+format-connected = <label-connected>
+
+label-connected =  %{T2}%{T-} connected
+label-disconnected =  
 
 [module/wlan]
 type = internal/network
@@ -123,7 +132,8 @@ interval = 3.0
 format-connected =  <label-connected>
 
 label-connected = %{T2}%{T-} %essid%
-label-disconnected = %{T2}%{T-} disconnected
+label-disconnected = %{T2}%{T-}
+
 
 [module/date]
 type = internal/date
@@ -135,7 +145,7 @@ date-alt = %a %d %b %Y
 time = %H:%M
 time-alt = %H:%M:%S
 
-label =   %date% - %time%
+label =    %date%  %time%
 ;label-foreground = ${colors.red}
 
 [module/battery]
@@ -152,9 +162,9 @@ time-format = %H:%M
 
 format-charging = %{T2}<label-charging>%{T-}
 format-discharging = %{T2}<ramp-capacity><label-discharging>%{T-}
-label-charging = %percentage%%
+label-charging =  
 label-discharging = %percentage%%
-label-full =  100%
+label-full =   
 
 ramp-capacity-0 = 
 ramp-capacity-1 = 
@@ -194,7 +204,6 @@ ramp-volume-0 = 
 ramp-volume-1 = 
 ramp-volume-2 = 
 
-
 [module/cmus]
 type = custom/script
 
@@ -208,3 +217,98 @@ click-right = cmus-remote --stop
 format = <label>
 format-underline = ${colors.primary}
 label = %output%
+
+
+
+[module/cpu]
+type = internal/cpu
+
+; Seconds to sleep between updates
+; Default: 1
+interval =0.5
+
+; Available tags:
+;   <label> (default)
+;   <bar-load>
+;   <ramp-load>
+;   <ramp-coreload>
+format = <label> <ramp-coreload>
+
+; Available tokens:
+;   %percentage% (default) - total cpu load averaged over all cores
+;   %percentage-sum% (unreleased) - Cumulative load on all cores
+;   %percentage-cores% - load percentage for each core
+;   %percentage-core[1-9]% - load percentage for specific core
+label =  CPU %percentage%%
+
+; Spacing between individual per-core ramps (unreleased)
+ramp-coreload-spacing = 1
+ramp-coreload-0 = ▁
+ramp-coreload-1 = ▂
+ramp-coreload-2 = ▃
+ramp-coreload-3 = ▄
+ramp-coreload-4 = ▅
+ramp-coreload-5 = ▆
+ramp-coreload-6 = ▇
+ramp-coreload-7 = █
+
+
+[module/mpd]
+type = internal/mpd
+
+; Host where mpd is running (either ip or domain name)
+; Can also be the full path to a unix socket where mpd is running.
+host = 127.0.0.1
+port = 6600
+password = mysecretpassword
+
+; Seconds to sleep between progressbar/song timer sync
+; Default: 1
+interval = 2
+
+[module/system-cpu-temppercore]
+type = custom/script
+exec = ~/.config/polybar/system-cpu-temppercore.sh
+interval = 60
+label =   %output%
+
+
+
+[module/menu-apps]
+type = custom/menu
+
+; If true, <label-toggle> will be to the left of the menu items (default).
+; If false, it will be on the right of all the items.
+expand-right = true
+
+; "menu-LEVEL-N" has the same properties as "label-NAME" with
+; the additional "exec" property
+;
+; Available exec commands:
+;   menu-open-LEVEL
+;   menu-close
+; Other commands will be executed using "/usr/bin/env sh -c $COMMAND"
+
+menu-0-0 = Browsers
+menu-0-0-exec = menu-open-1
+menu-0-1 = Multimedia
+menu-0-1-exec = menu-open-2
+
+menu-1-0 = Firefox
+menu-1-0-exec = firefox &
+menu-1-1 = Chromium
+menu-1-1-exec = chromium &
+
+menu-2-0 = Gimp
+menu-2-0-exec = gimp &
+menu-2-1 = Scrot
+menu-2-1-exec = scrot &
+
+
+
+[module/gmail]
+type = custom/script
+exec = ~/.config/polybar/gmail/launch.py
+tail = true
+click-left = xdg-open https://mail.google.com
+label= %output%

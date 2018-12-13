@@ -1,8 +1,8 @@
 Xft.dpi:                        109
 URxvt*termName:                 xterm-256color
-URxvt*font:                     xft:iosevka:pixelsize=18:style=medium:antialias=true
+URxvt*font:                     xft:Iosevka:pixelsize=18:style=medium:antialias=true
 URxvt*lineSpace:                1
-URxvt.letterSpace:              -1
+URxvt.letterSpace:              1
 URxvt.iso14755:                 false
 URxvt.iso14755_52:              false
 URxvt*geometry:                 65x17
