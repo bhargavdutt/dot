@@ -1,0 +1,342 @@
+;**********************************************************
+;
+;                  COLORS
+;
+;**********************************************************
+
+[colors]
+; Base colors from .Xresource
+bg      =   #902c8bb0
+bg-alt  =   ${xrdb:color0}
+fg      =   #ffffff
+fg-alt  =   ${xrdb:color8}
+red     =   ${xrdb:color1}
+green   =   ${xrdb:color2}
+yellow  =   ${xrdb:color3}
+blue    =   ${xrdb:color4}
+magenta =   ${xrdb:color5}
+cyan    =   ${xrdb:color6}
+white   =   ${xrdb:color7}
+
+;**********************************************************
+;
+;           GLOBAL WM SETTINGS
+;
+;**********************************************************
+
+[global/wm]
+margin-top = 0
+margin-bottom = 0
+
+;*********************************************************
+;
+;           BAR SETTINGS
+;
+;********************************************************
+
+[bar/top]
+monitor = ${env:MONITOR:LVDS-1}
+width = 100%
+height = 25
+offset-x = 10
+offset-y = 10
+
+background = ${colors.bg}
+foreground = ${colors.fg}
+
+border-bottom-size = 0
+border-bottom-color = ${colors.bg-alt}
+
+spacing = 2
+padding-left = 0
+padding-right = 0
+module-margin-left = 1
+module-margin-right = 1
+radius = 10.10
+font-0 = xft:iosevka:pixelsize=12:style=medium:antialias=true;3
+font-1 = MaterialIcons-Regular:size=16;3
+override-redirect=false
+modules-left = i3
+modules-center = cmus
+modules-right = volume gmail system-cpu-temppercore  cpu label battery wlan date powermenu
+tray-position = left
+tray-padding = 1
+
+
+
+
+
+;**********************************************************
+;
+;                   MODULES SETTINGS
+;
+;**********************************************************
+
+[module/i3]
+type = internal/i3
+
+; Only show workspaces defined on the same output as the bar
+; NOTE: The bspwm and XRandR monitor names must match, which they do by default.
+; Default: true
+pin-workspaces = true
+
+; Output mode flags after focused state label
+; Default: false
+inline-mode = false
+
+; Create click handler used to focus workspace
+; Default: true
+enable-click = false
+
+; Create scroll handlers used to cycle workspaces
+; Default: true
+enable-scroll = false
+
+; Set the scroll cycle direction
+; Default: true
+reverse-scroll = false
+
+; Use fuzzy (partial) matching on labels when assigning
+; icons to workspaces
+; Example: code;♚ will apply the icon to all workspaces
+; containing 'code' in the
+; label
+; Default: false
+fuzzy-match = true
+
+strip-wsnumbers = true
+
+label-focused-padding = 2
+label-focused-margin = 0.5
+label-focused-foreground = #ffffff
+label-focused-background = #2c8bb0
+label-focused-underline = #fba922
+
+label-unfocused-padding = 2
+label-unfocused-margin = 0.5
+label-visible-padding = 2
+label-visible-margin = 0.5
+label-separator =|
+label-empty-foreground = #55
+
+
+[module/wired-network]
+type = internal/network
+interface = enp19s0
+interval = 3.0
+
+format-connected = <label-connected>
+
+label-connected =  %{T2}%{T-} connected
+label-disconnected =  
+
+[module/wlan]
+type = internal/network
+interface = wlp18s0b1
+interval = 3.0
+
+format-connected =  <label-connected>
+
+label-connected = %{T2}%{T-} %essid%
+label-disconnected = %{T2}%{T-}
+
+[module/date]
+type = internal/date
+interval = 5
+
+date = %b %d
+date-alt = %a %d %b %Y
+
+time = %H:%M
+time-alt = %H:%M:%S
+
+label =    %date%  %time%
+;label-foreground = ${colors.red}
+
+[module/battery]
+type = internal/battery
+
+full-at = 99
+
+battery = BAT0
+adapter = AC0
+
+poll-interval = 5
+
+time-format = %H:%M
+
+format-charging = %{T2}<label-charging>%{T-}
+format-discharging = %{T2}<ramp-capacity><label-discharging>%{T-}
+label-charging =  
+label-discharging = %percentage%%
+label-full =   
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+bar-capacity-width = 10
+
+[module/volume]
+type = internal/volume
+
+; Soundcard to be used
+master-soundcard = hw:0
+speaker-soundcard = hw:0
+;headphone-soundcard = hw:0
+;headphone-id = 1
+
+; Name of the master mixer
+; Default: Master
+master-mixer = Master
+
+; Optionally define speaker and headphone mixers
+; Use the following command to list available mixer controls:
+; $ amixer scontrols | sed -nr "s/.*'([[:alnum:]]+)'.*/\1/p"
+; Default: none
+speaker-mixer = Speaker
+; Default: none
+;headphone-mixer = Headphone
+
+format-volume = %{T2}<bar-volume><label-volume>%{T-}
+
+bar-volume-width = 10
+bar-volume-foreground-0 = #ffffff
+bar-volume-foreground-1 = #ffffff
+bar-volume-foreground-2 = #ffffff
+bar-volume-foreground-3 = #ffffff
+bar-volume-foreground-4 = #ffffff
+bar-volume-foreground-5 = #ffffff
+bar-volume-foreground-6 = #ffffff
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-font = 2
+bar-volume-fill = ─
+bar-volume-fill-font = 2
+bar-volume-empty = ─
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colors.fg}
+
+
+[module/cmus]
+type = custom/script
+
+exec = ~/.config/polybar/cmus.sh
+exec-if = pgrep -x cmus
+interval = 1
+click-left = cmus-remote --next
+click-right = cmus-remote --prev
+click-middle = cmus-remote --pause
+scroll-up = cmus-remote --volume +5%
+scroll-down = cmus-remote --volume -5%
+
+label-font = 3
+format = <label>
+format-underline = ${colors.fg}
+label = : %output%
+label-maxlen = 70
+
+
+[module/cpu]
+type = internal/cpu
+
+; Seconds to sleep between updates
+; Default: 1
+interval =0.5
+
+; Available tags:
+;   <label> (default)
+;   <bar-load>
+;   <ramp-load>
+;   <ramp-coreload>
+format = <label>
+
+; Available tokens:
+;   %percentage% (default) - total cpu load averaged over all cores
+;   %percentage-sum% (unreleased) - Cumulative load on all cores
+;   %percentage-cores% - load percentage for each core
+;   %percentage-core[1-9]% - load percentage for specific core
+label =  CPU %percentage%%
+
+
+[module/mpd]
+type = internal/mpd
+
+; Host where mpd is running (either ip or domain name)
+; Can also be the full path to a unix socket where mpd is running.
+host = 127.0.0.1
+port = 6600
+password = mysecretpassword
+
+; Seconds to sleep between progressbar/song timer sync
+; Default: 1
+interval = 2
+
+[module/system-cpu-temppercore]
+type = custom/script
+exec = ~/.config/polybar/system-cpu-temppercore.sh
+interval = 60
+label =   %output%
+
+
+
+[module/menu-apps]
+type = custom/menu
+
+; If true, <label-toggle> will be to the left of the menu items (default).
+; If false, it will be on the right of all the items.
+expand-right = true
+
+; "menu-LEVEL-N" has the same properties as "label-NAME" with
+; the additional "exec" property
+;
+; Available exec commands:
+;   menu-open-LEVEL
+;   menu-close
+; Other commands will be executed using "/usr/bin/env sh -c $COMMAND"
+
+menu-0-0 = Browsers
+menu-0-0-exec = menu-open-1
+menu-0-1 = Multimedia
+menu-0-1-exec = menu-open-2
+
+menu-1-0 = Firefox
+menu-1-0-exec = firefox &
+menu-1-1 = Chromium
+menu-1-1-exec = chromium &
+
+menu-2-0 = Gimp
+menu-2-0-exec = gimp &
+menu-2-1 = Scrot
+menu-2-1-exec = scrot &
+
+
+
+[module/gmail]
+type = custom/script
+exec = ~/.config/polybar/gmail/launch.py
+tail = true
+click-left = xdg-open https://mail.google.com
+label= %output%
+
+[module/powermenu]
+type = custom/menu
+
+label-open = 
+;label-open-background = #dd0000
+;label-open-foreground = #fff
+label-close = 
+;label-close-background = #dd0000
+;label-close-foreground = #fff
+label-open-padding = 0
+label-close-padding = 0 
+
+menu-0-0 = 
+menu-0-0-exec = systemctl reboot
+menu-0-1 = 
+menu-0-1-exec = systemctl poweroff
+menu-0-0-padding = 2
+menu-0-1-padding = 2
+
